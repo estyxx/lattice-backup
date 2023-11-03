@@ -1,0 +1,8 @@
+query RootCompanyInfo {
+  company(slug: "torchbox") {
+    entityId
+    preferredLocale {
+      shortCode
+    }
+  }
+}

@@ -1,0 +1,275 @@
+query CompetencyViewQuery($userEntityId: String!) {
+  viewer {
+    ...CompetencyCommentFeed_viewer
+    user {
+      entityId
+      id
+    }
+    id
+  }
+  user(entityId: $userEntityId) {
+    entityId
+    viewerIsUser
+    viewerIsManager
+    growthPlan {
+      entityId
+      totalGrowthAreas
+      id
+    }
+    ...CompetencyListHeader_user
+    ...CompetencyCard_user
+    ...CompetencyCommentFeed_user
+    currentUserCompetencyList {
+      competency {
+        entityId
+        name
+        id
+      }
+      updatedAt
+      designation
+      designator {
+        entityId
+        name
+        id
+      }
+      id
+    }
+    employeeFacingTrack {
+      jobLevels {
+        ...CompetencyCard_comparisonLevel
+        entityId
+        id
+      }
+      ...getTrackFromFragmentRef_track
+      ...CompetencyCard_track
+      id
+    }
+    jobLevel {
+      entityId
+      name
+      competencyExpectationPairs {
+        competency {
+          entityId
+          ...CompetencyCard_competency
+          id
+        }
+        expectation {
+          entityId
+          id
+        }
+      }
+      ...CompetencyCard_activeLevel
+      ...CompetencyCard_comparisonLevel
+      id
+    }
+    id
+  }
+}
+
+fragment Avatar_user on User {
+  name
+  email
+  title
+  pronouns
+  status
+  avatarUrl
+  avatarFileName
+  avatarCropValues {
+    x
+    y
+    z
+  }
+  colorScheme {
+    userColor
+    id
+  }
+}
+
+fragment CompetencyCardLevelSelector_track on Track {
+  jobLevels {
+    entityId
+    name
+    id
+    jobArchitectureJobLevel {
+      id
+      name
+    }
+  }
+}
+
+fragment CompetencyCard_activeLevel on JobLevel {
+  name
+  entityId
+
+  competencyExpectationPairs {
+    competency {
+      name
+      description
+      entityId
+      id
+    }
+    expectation {
+      entityId
+      description
+      id
+    }
+  }
+}
+
+fragment CompetencyCard_comparisonLevel on JobLevel {
+  name
+  entityId
+  competencyExpectationPairs {
+    competency {
+      name
+      description
+      entityId
+      id
+    }
+    expectation {
+      entityId
+      description
+      id
+    }
+  }
+}
+
+fragment CompetencyCard_competency on Competency {
+  name
+  description
+  entityId
+}
+
+fragment CompetencyCard_track on Track {
+  entityId
+  ...CompetencyCardLevelSelector_track
+}
+
+fragment CompetencyCard_user on User {
+  entityId
+  viewerIsUser
+  viewerIsManager
+  viewerCanManageGrowthPlans
+  jobLevel {
+    entityId
+    id
+  }
+  growthPlan {
+    entityId
+    totalGrowthAreas
+    id
+  }
+  currentUserCompetencyList {
+    entityId
+    lastAlignedAt
+    designation
+    competency {
+      entityId
+      id
+    }
+    id
+  }
+}
+
+fragment CompetencyCommentFeed_user on User {
+  entityId
+  viewerIsManager
+  viewerIsUser
+  currentUserCompetencyList {
+    entityId
+    competency {
+      entityId
+      id
+    }
+    comments {
+      entityId
+      createdAt
+      editedAt
+      body
+      canViewerDestroyComment
+      canViewerEditComment
+      commenter {
+        ...Avatar_user
+        entityId
+        name
+        id
+      }
+      id
+    }
+    id
+  }
+  employeeFacingTrack {
+    entityId
+    id
+  }
+}
+
+fragment CompetencyCommentFeed_viewer on Viewer {
+  user {
+    ...Avatar_user
+    entityId
+    id
+  }
+}
+
+fragment CompetencyListCompetencyTheme_competencyTheme on CompetencyTheme {
+  entityId
+  description
+  name
+}
+
+fragment CompetencyListHeader_jobLevel on JobLevel {
+  name
+}
+
+fragment CompetencyListHeader_track on Track {
+  name
+}
+
+fragment CompetencyListHeader_user on User {
+  viewerCanManageGrowthPlans
+  viewerIsManager
+  preferredName
+  entityId
+}
+
+fragment getTrackFromFragmentRef_track on Track {
+  entityId
+  ...CompetencyListHeader_track
+  ...CompetencyCard_track
+  trackCompetencyThemes {
+    __typename
+    ... on TrackCompetencyTheme {
+      theme {
+        entityId
+        name
+        description
+        ...CompetencyListCompetencyTheme_competencyTheme
+        id
+      }
+    }
+    competencies {
+      entityId
+      ...CompetencyCard_competency
+      id
+    }
+  }
+  jobLevels {
+    entityId
+    ...CompetencyListHeader_jobLevel
+    ...CompetencyCard_activeLevel
+    ...CompetencyCard_comparisonLevel
+    competencyExpectationPairs {
+      competency {
+        entityId
+        ...CompetencyCard_competency
+        id
+      }
+      expectation {
+        entityId
+        id
+      }
+    }
+    id
+  }
+}

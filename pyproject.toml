@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "lattice-backup"
+version = "0.1.0"
+description = ""
+authors = ["Ester Beltrami <ester.beltrami@torchbox.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+httpx = "^0.25.1"
+python-dotenv = "^1.0.0"
+
+
+[tool.poetry.group.dev.dependencies]
+detect-secrets = "^1.4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
