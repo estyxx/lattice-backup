@@ -1,5 +1,9 @@
 # Lattice Competency Backup Tool
 
+<p align="center">
+  <img src="lattice_backup.png" width="200" height="200">
+</p>
+
 This project is designed to interact with the Lattice GraphQL API to query and back up user competencies. It allows you to export the competency data for archival or analysis purposes.
 
 ## Prerequisites
