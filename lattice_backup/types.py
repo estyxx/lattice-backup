@@ -106,7 +106,7 @@ class Track:
     def from_dict(cls, d: dict, user_competency_info: dict[str, dict]) -> "Track":
         job_levels = [
             JobLevel.from_dict(level, user_competency_info=user_competency_info)
-            for level in d["jobLevels"]
+            for level in d.get("jobLevels", [])
         ]
         return cls(
             entity_id=d["entityId"], name=d["name"].strip(), job_levels=job_levels
@@ -155,7 +155,7 @@ class User:
             track=Track.from_dict(
                 d["employeeFacingTrack"], user_competency_info=user_competency_info
             )
-            if "employeeFacingTrack" in d
+            if d.get("employeeFacingTrack")
             else None,
         )
 
