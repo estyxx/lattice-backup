@@ -30,7 +30,13 @@ poetry install
 
 ## Configuration
 
-Before running the script, you need to obtain your `ACCESS_TOKEN` and `LATTICE_USER_ENTITY_ID` from Lattice:
+Before running the script, you need to set up your environment variables by creating a `.env` file. An example file `.env.example` is provided in the repository.
+
+### Setting up the .env file
+
+Copy the `.env.example` to a new file named `.env`.
+
+Fill in the `ACCESS_TOKEN` and `LATTICE_USER_ENTITY_ID` with your own values obtained from Lattice.
 
 ### Obtaining ACCESS_TOKEN
 
@@ -50,6 +56,19 @@ Once you have your `ACCESS_TOKEN` and `LATTICE_USER_ENTITY_ID`, you can run the 
 
 ```bash
 poetry run main.py
+```
+
+## Backup Options
+
+By default, the script will save the backup data in the `./backup` directory. You can control the backup behavior with the following command line options:
+
+- `--backup`: Enables backup (this is the default behavior).
+- `--no-backup`: Disables backup.
+
+For example, to disable backup:
+
+```bash
+poetry run main.py --no-backup
 ```
 
 ## Important Notes

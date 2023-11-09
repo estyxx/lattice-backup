@@ -1,0 +1,67 @@
+query GrowthAreasQuery($userEntityId: String!) {
+  viewer {
+    ...GrowthAreas_viewer_3wQ7TA
+    id
+  }
+}
+
+fragment GrowthAreaCardStatus_growthArea on GrowthArea {
+  completedAt
+  lastUpdatedAt
+  createdAt
+  updatedAt
+  status
+}
+
+fragment GrowthAreaCard_growthArea on GrowthArea {
+  title
+  entityId
+  status
+  competency {
+    name
+    id
+  }
+  template {
+    actionsConfiguration
+    id
+  }
+  totalNumberOfActions
+  numberOfOverdueActions
+  numberOfCompletedActions
+  isAddedToOneOnOneMeeting
+  ...GrowthAreaCardStatus_growthArea
+}
+
+fragment GrowthAreas_viewer_3wQ7TA on Viewer {
+  userId
+  companyId
+  growthPlanUser: findUser(userId: $userEntityId) {
+    entityId
+    viewerCanManageGrowthPlans
+    viewerIsUser
+    viewerIsManager
+    growthPlan {
+      entityId
+      totalGrowthAreas
+      growthAreas(first: 20, status: ALL) {
+        total
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        edges {
+          node {
+            entityId
+            status
+            ...GrowthAreaCard_growthArea
+            id
+            __typename
+          }
+          cursor
+        }
+      }
+      id
+    }
+    id
+  }
+}

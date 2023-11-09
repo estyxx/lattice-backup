@@ -1,14 +1,17 @@
 from lattice_backup import lattice
 from lattice_backup import types
+import argparse
 
 
-def main():
-    data = lattice.get_competencies()
+def main(backup: bool):
+    data = lattice.get_competencies(backup=backup)
+    lattice.get_growth_areas(backup=backup)
+
     user = types.User.from_dict(data["data"]["user"])
 
     if not user.track:
         print(
-            "I'm sorry, apprently you don't have a track assigned anymore, "
+            "I'm sorry, apparently you don't have a track assigned anymore, "
             "I cannot export your competences 😭",
         )
         return
@@ -44,4 +47,17 @@ def main():
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    parser = argparse.ArgumentParser(description="Lattice backup")
+    parser.add_argument(
+        "--backup",
+        dest="backup",
+        action="store_true",
+        help="Enable backup (default: True)",
+    )
+    parser.add_argument(
+        "--no-backup", dest="backup", action="store_false", help="Disable backup"
+    )
+    parser.set_defaults(backup=True)
+    args = parser.parse_args()
+
+    raise SystemExit(main(backup=args.backup))
