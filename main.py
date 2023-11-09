@@ -3,10 +3,22 @@ from lattice_backup import types
 import argparse
 
 
-def main(backup: bool):
-    data = lattice.get_competencies(backup=backup)
-    lattice.get_growth_areas(backup=backup)
+def _growth_area_backup(backup: bool = True):
+    data = lattice.get_growth_areas(backup=backup)
+    growth_areas = data["data"]["viewer"]["growthPlanUser"]["growthPlan"][
+        "growthAreas"
+    ]["edges"]
+    for growth_area in growth_areas:
+        growth_area_entity_id = growth_area["node"]["entityId"]
 
+        # get the progress detail for every area
+        lattice.get_growth_area_progress(
+            growth_area_entity_id=growth_area_entity_id, backup=bool
+        )
+
+
+def _competencies_backup(backup: bool = True):
+    data = lattice.get_competencies(backup=backup)
     user = types.User.from_dict(data["data"]["user"])
 
     if not user.track:
@@ -44,6 +56,11 @@ def main(backup: bool):
 
         print()
         print("-" * 30)
+
+
+def main(backup: bool):
+    _competencies_backup(backup=backup)
+    _growth_area_backup(backup=backup)
 
 
 if __name__ == "__main__":

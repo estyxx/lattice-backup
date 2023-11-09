@@ -7,7 +7,13 @@ from datetime import datetime
 config = dotenv_values(".env")
 
 
-def _execute(query_name: str, id: str, variables: dict[str, str], backup: bool = True):
+def _execute(
+    query_name: str,
+    id: str,
+    variables: dict[str, str],
+    backup: bool = True,
+    backup_name_suffix: str = "",
+):
     query = Path(f"./lattice_backup/queries/{query_name}.graphql").read_text()
     data = {
         "id": "CompetencyViewQuery",
@@ -32,7 +38,7 @@ def _execute(query_name: str, id: str, variables: dict[str, str], backup: bool =
         if backup:
             # Generate a filename with a timestamp
             timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-            output_filename = f"{query_name}_{timestamp}.json"
+            output_filename = f"{timestamp}_{query_name}{backup_name_suffix}.json"
 
             # Create the backup directory if it doesn't exist
             backup_directory = Path("./backup")
@@ -68,5 +74,22 @@ def get_growth_areas(backup: bool = True):
             "userEntityId": config["LATTICE_USER_ENTITY_ID"],
         },
         backup=backup,
+    )
+    return response
+
+
+def get_growth_area_progress(
+    growth_area_entity_id: str,
+    backup: bool = True,
+):
+    response = _execute(
+        query_name="growth-area-progress",
+        id="GrowthAreaProgressQuery",
+        variables={
+            "userEntityId": config["LATTICE_USER_ENTITY_ID"],
+            "growthAreaEntityId": growth_area_entity_id,
+        },
+        backup=backup,
+        backup_name_suffix=f"_{growth_area_entity_id}",
     )
     return response

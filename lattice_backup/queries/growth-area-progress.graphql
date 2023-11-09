@@ -1,0 +1,831 @@
+query GrowthAreaProgressQuery($growthAreaEntityId: EntityId!, $userEntityId: String!) {
+  viewer {
+    user {
+      products {
+        feedback {
+          __typename
+          isEnabled
+        }
+      }
+      id
+    }
+    ...GrowthAreaProgressHeader_viewer
+    ...GrowthAreaFeedbackSection_viewer_3DWl5z
+    id
+  }
+  growthArea(entityId: $growthAreaEntityId) {
+    growthPlan {
+      entityId
+      user {
+        entityId
+        viewerIsUser
+        viewerIsManager
+        ...GrowthAreaProgressInput_growthPlanOwner
+        id
+      }
+      id
+    }
+    growthAreaUpdates {
+      entityId
+      id
+    }
+    entityId
+    isUpdatable
+    ...GrowthAreaProgressHeader_growthArea
+    ...GrowthPlanGrowthAreaTimeline_growthArea
+    ...GrowthAreaActionItems_growthArea
+    ...GrowthAreaFeedbackSection_growthArea
+    id
+  }
+}
+
+fragment AvatarGroup_users on User {
+  name
+  entityId
+  ...Avatar_user
+  ...UserHoverCard_user
+}
+
+fragment Avatar_user on User {
+  name
+  email
+  title
+  pronouns
+  status
+  avatarUrl
+  avatarFileName
+  avatarCropValues {
+    x
+    y
+    z
+  }
+  colorScheme {
+    userColor
+    id
+  }
+}
+
+fragment Avatar_user_3tUUbs on User {
+  name
+  email
+  title
+  pronouns
+  status
+  avatarUrl
+  avatarFileName
+  avatarCropValues {
+    x
+    y
+    z
+  }
+  colorScheme {
+    userColor
+    id
+  }
+}
+
+fragment FeedbackCardV2_feedback on FeedbackInterface {
+  __isFeedbackInterface: __typename
+  type: __typename
+  id
+  entityId
+  createdAt
+  body
+  ... on Feedback {
+    visibility
+    author {
+      id
+      preferredName
+      viewerIsUser
+      ...UserCard_user_3tUUbs
+    }
+    feedbackRequest {
+      id
+      entityId
+      type: __typename
+      body
+      author {
+        id
+        preferredName
+        viewerIsUser
+        ...UserCard_user_3tUUbs
+      }
+    }
+    targets {
+      id
+      entityId
+      name
+      viewerIsUser
+      ...AvatarGroup_users
+      ...UserCard_user_3tUUbs
+    }
+    companyValues {
+      entityId
+      name
+      id
+    }
+    ...FeedbackReactionsFooter_feedback
+  }
+  ... on ExternalFeedback {
+    externalFeedbackVisibility: visibility
+    target {
+      id
+      preferredName
+      viewerIsUser
+      ...UserCard_user_3tUUbs
+    }
+    externalFeedbackRequest {
+      id
+      entityId
+      type: __typename
+      body
+      targetEmail
+      author {
+        id
+        preferredName
+        viewerIsUser
+        ...UserCard_user_3tUUbs
+      }
+    }
+  }
+  ... on FeedbackNote {
+    author {
+      id
+      preferredName
+      viewerIsUser
+      ...UserCard_user_3tUUbs
+    }
+    target {
+      id
+      preferredName
+      viewerIsUser
+      ...UserCard_user_3tUUbs
+    }
+  }
+  ... on FeedbackRequest {
+    visibility
+    fulfilledAt
+    requestRequestor: author {
+      id
+      preferredName
+      viewerIsUser
+      ...UserCard_user_3tUUbs
+    }
+    requestAuthor: target {
+      id
+      preferredName
+      viewerIsUser
+      ...UserCard_user_3tUUbs
+    }
+    requestTarget: subject {
+      id
+      preferredName
+      viewerIsUser
+      ...UserCard_user_3tUUbs
+    }
+    ...FeedbackRequestCardFooter_feedback
+  }
+  ... on ExternalFeedbackRequest {
+    targetEmail
+    fulfilledAt
+    externalRequestRequestor: author {
+      id
+      preferredName
+      viewerIsUser
+      ...UserCard_user_3tUUbs
+    }
+    externalRequestAuthor: target {
+      id
+      preferredName
+      viewerIsUser
+      ...UserCard_user_3tUUbs
+    }
+    externalRequestTarget: subject {
+      id
+      preferredName
+      viewerIsUser
+      ...UserCard_user_3tUUbs
+    }
+    ...FeedbackRequestCardFooter_feedback
+  }
+  ...FeedbackLinkedEntityHeader_feedback
+}
+
+fragment FeedbackCardV2_viewer on Viewer {
+  id
+  isCompanyAdminImpersonation
+  user {
+    id
+    entityId
+  }
+  ...FeedbackReactionsFooter_viewer
+  ...FeedbackRequestCardFooter_viewer
+}
+
+fragment FeedbackLinkedEntityHeader_feedback on FeedbackInterface {
+  __isFeedbackInterface: __typename
+  ... on Feedback {
+    competency {
+      __typename
+      name
+      id
+    }
+    growthArea {
+      __typename
+      title
+      competency {
+        name
+        id
+      }
+    }
+  }
+  ... on FeedbackRequest {
+    competencyData {
+      competency {
+        __typename
+        name
+        id
+      }
+      id
+    }
+    growthArea {
+      __typename
+      title
+      competency {
+        name
+        id
+      }
+    }
+  }
+}
+
+fragment FeedbackModal_requestSubject on User {
+  preferredName
+  ...RequestFeedback_requestSubject
+}
+
+fragment FeedbackModal_viewer on Viewer {
+  userId
+  user {
+    products {
+      feedback {
+        __typename
+        isEnabled
+      }
+    }
+    id
+  }
+  ...GiveFeedback_viewer
+  ...RequestFeedback_viewer
+}
+
+fragment FeedbackReactionsFooter_feedback on Feedback {
+  entityId
+  reactions {
+    entityId
+    body
+    reactor {
+      entityId
+      name
+      viewerIsUser
+      id
+    }
+    id
+  }
+}
+
+fragment FeedbackReactionsFooter_viewer on Viewer {
+  user {
+    entityId
+    id
+  }
+}
+
+fragment FeedbackRequestCardFooter_feedback on FeedbackInterface {
+  __isFeedbackInterface: __typename
+  type: __typename
+  id
+  entityId
+  ... on FeedbackRequest {
+    competencyData {
+      competency {
+        entityId
+        id
+      }
+      id
+    }
+    growthArea {
+      entityId
+    }
+    requestRequestor: author {
+      viewerIsUser
+      id
+    }
+  }
+  ... on ExternalFeedbackRequest {
+    externalRequestRequestor: author {
+      viewerIsUser
+      id
+    }
+  }
+}
+
+fragment FeedbackRequestCardFooter_viewer on Viewer {
+  user {
+    id
+    entityId
+  }
+}
+
+fragment FeedbackRequestCard_feedbackRequest on FeedbackRequest {
+  entityId
+  body
+  createdAt
+  ...FeedbackLinkedEntityHeader_feedback
+  author {
+    id
+    ...UserCard_user
+  }
+  subject {
+    id
+    ...UserCard_user
+  }
+  visibility
+  growthArea {
+    entityId
+  }
+  competencyData {
+    competency {
+      id
+    }
+    id
+  }
+}
+
+fragment FeedbackRequestCard_viewer on Viewer {
+  user {
+    entityId
+    id
+  }
+}
+
+fragment GiveFeedback_viewer on Viewer {
+  userId
+  user {
+    products {
+      feedback {
+        __typename
+        isEnabled
+      }
+    }
+    id
+  }
+  company {
+    slug
+    name
+    enabledFeedbackDeliverableTypes
+    valuesEnabled
+    values {
+      id
+      name
+    }
+    ...ValuesModal_company
+    id
+  }
+  receivedFeedbackRequests(first: 20, fulfilled: false) {
+    edges {
+      node {
+        entityId
+        ...FeedbackRequestCard_feedbackRequest
+        id
+      }
+    }
+  }
+  ...FeedbackRequestCard_viewer
+}
+
+fragment GoalContextualIcon_goal on Goal {
+  okrType
+  private
+  state
+}
+
+fragment GrowthAreaActionCheckboxListItem_action on GrowthAreaAction {
+  entityId
+  status
+  targetDate
+  body
+  completedAt
+}
+
+fragment GrowthAreaActionCheckboxListItem_growthArea on GrowthArea {
+  id
+  entityId
+  growthPlan {
+    entityId
+    user {
+      entityId
+      viewerIsUser
+      viewerIsManager
+      id
+    }
+    id
+  }
+}
+
+fragment GrowthAreaActionItems_growthArea on GrowthArea {
+  id
+  entityId
+  status
+  actions {
+    entityId
+    status
+    targetDate
+    body
+    ...GrowthAreaActionCheckboxListItem_action
+    id
+  }
+  growthPlan {
+    entityId
+    user {
+      entityId
+      viewerIsUser
+      viewerIsManager
+      viewerCanManageGrowthPlans
+      id
+    }
+    id
+  }
+  template {
+    actionsConfiguration
+    actionsHelperText
+    id
+  }
+  ...GrowthAreaActionCheckboxListItem_growthArea
+}
+
+fragment GrowthAreaDetails_growthArea on GrowthArea {
+  entityId
+  title
+  description
+  targetDate
+  ...GrowthAreaStatus_growthArea
+  ...GrowthAreaActionCheckboxListItem_growthArea
+  template {
+    actionsConfiguration
+    id
+  }
+  competency {
+    name
+    id
+  }
+  questions {
+    body
+    response
+  }
+  actions {
+    entityId
+    body
+    targetDate
+    status
+    ...GrowthAreaActionCheckboxListItem_action
+    id
+  }
+  growthPlan {
+    user {
+      entityId
+      viewerIsManager
+      viewerIsUser
+      ...GrowthAreaReviewRevokedAccessBanner_user
+      id
+    }
+    id
+  }
+  hasUnavailableReviewRequestQuestions
+  availableReviewRequestQuestions {
+    __typename
+    entityId
+    id
+  }
+  ...ReviewRequestQuestionCardContainer_growthArea
+}
+
+fragment GrowthAreaDetails_viewer on Viewer {
+  isAdmin
+  company {
+    products {
+      reviews {
+        isEnabled
+      }
+    }
+    id
+  }
+}
+
+fragment GrowthAreaFeedbackSection_growthArea on GrowthArea {
+  entityId
+  title
+  description
+  targetDate
+  status
+  questions {
+    body
+    response
+  }
+  competency {
+    entityId
+    name
+    id
+  }
+  feedback {
+    __typename
+    id
+    ...FeedbackCardV2_feedback
+  }
+}
+
+fragment GrowthAreaFeedbackSection_viewer_3DWl5z on Viewer {
+  ...FeedbackCardV2_viewer
+  ...FeedbackModal_viewer
+  findUser(userId: $userEntityId) {
+    ...FeedbackModal_requestSubject
+    viewerIsUser
+    name
+    id
+  }
+}
+
+fragment GrowthAreaProgressHeader_growthArea on GrowthArea {
+  entityId
+  completedAt
+  competency {
+    name
+    id
+  }
+  availableReviewRequestQuestions {
+    __typename
+    entityId
+    id
+  }
+  growthPlan {
+    entityId
+    user {
+      entityId
+      viewerIsManager
+      viewerIsUser
+      viewerCanManageGrowthPlans
+      id
+    }
+    id
+  }
+  ...GrowthAreaDetails_growthArea
+}
+
+fragment GrowthAreaProgressHeader_viewer on Viewer {
+  ...GrowthAreaDetails_viewer
+}
+
+fragment GrowthAreaProgressInput_growthPlanOwner on User {
+  viewerIsUser
+  preferredName
+}
+
+fragment GrowthAreaReviewRevokedAccessBanner_user on User {
+  name
+  preferredName
+  viewerIsManager
+  viewerIsUser
+}
+
+fragment GrowthAreaStatus_growthArea on GrowthArea {
+  targetDate
+  completedAt
+  lastUpdatedAt
+}
+
+fragment GrowthPlanGrowthAreaTimeline_growthArea on GrowthArea {
+  id
+  entityId
+  title
+  growthAreaTimeline {
+    total
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        __typename
+        ... on GrowthAreaUpdate {
+          createdAt
+          entityId
+          body
+          creator {
+            name
+            ...Pronouns_user
+            viewerIsUser
+            ...Avatar_user
+            id
+          }
+          growthArea {
+            entityId
+            id
+          }
+          talkingPoint {
+            ...TalkingPointBadge_talkingPoint
+            id
+          }
+          id
+        }
+        ... on GrowthAreaActionHistory {
+          createdAt
+          entityId
+          action
+          growthAreaAction {
+            body
+            id
+          }
+          creator {
+            name
+            ...Pronouns_user
+            viewerIsUser
+            ...Avatar_user
+            id
+          }
+          id
+        }
+      }
+      cursor
+    }
+  }
+}
+
+fragment Pronouns_user on User {
+  pronouns
+}
+
+fragment RequestFeedbackVisibilityText_subject on User {
+  name
+  viewerIsManager
+  viewerIsUser
+  manager {
+    name
+    id
+  }
+}
+
+fragment RequestFeedback_requestSubject on User {
+  id
+  name
+  viewerIsUser
+  viewerIsManager
+  hasManager
+  products {
+    grow {
+      isEnabled
+    }
+  }
+  ...RequestFeedbackVisibilityText_subject
+  ...UserCard_user
+}
+
+fragment RequestFeedback_viewer on Viewer {
+  canSelectFeedbackSubject
+  company {
+    enabledFeedbackRequestDeliverableTypes
+    externalFeedbackEnabled
+    externalFeedbackSelfRequestEnabled
+    id
+  }
+  user {
+    id
+    name
+    viewerIsUser
+    viewerIsManager
+    hasManager
+    isManager
+    isAdmin
+    products {
+      grow {
+        isEnabled
+      }
+    }
+    ...RequestFeedbackVisibilityText_subject
+  }
+}
+
+fragment ReviewRequestQuestionCardContainer_growthArea on GrowthArea {
+  availableReviewRequestQuestions {
+    __typename
+    entityId
+    reviewGroupType
+    questionBody
+    reviewee {
+      responsesReleasedAt
+      id
+    }
+    goal {
+      name
+      ...GoalContextualIcon_goal
+      id
+    }
+    competency {
+      entityId
+      id
+    }
+    reviewerUser {
+      name
+      ...Avatar_user
+      id
+    }
+    ... on ReviewRequestQuestionForGrowthAreaRating {
+      responseRating
+      questionLabels
+      shouldHideNumbers
+    }
+    ... on ReviewRequestQuestionForGrowthAreaComment {
+      responseBody
+    }
+    ... on ReviewRequestQuestionForGrowthAreaRatingComment {
+      responseBody
+      responseRating
+      questionLabels
+      shouldHideNumbers
+    }
+    ... on ReviewRequestQuestionForGrowthAreaMultipleSelect {
+      responseChoices
+      questionLabels
+    }
+    ... on ReviewRequestQuestionForGrowthAreaMultipleSelectComment {
+      responseBody
+      responseChoices
+      questionLabels
+    }
+    ... on ReviewRequestQuestionForGrowthAreaMultipleChoice {
+      responseChoice
+      questionLabels
+    }
+    ... on ReviewRequestQuestionForGrowthAreaMultipleChoiceComment {
+      responseBody
+      responseChoice
+      questionLabels
+    }
+    id
+  }
+}
+
+fragment TalkingPointBadge_talkingPoint on FocusAreaOneOnOneTalkingPoint {
+  entityId
+  meeting {
+    entityId
+    checkinRelationship {
+      viewerIsReport
+      manager {
+        entityId
+        id
+      }
+      report {
+        entityId
+        id
+      }
+      id
+    }
+    id
+  }
+}
+
+fragment UserCard_user on User {
+  id
+  entityId
+  name
+  title
+  isAdmin
+  email
+  ...Pronouns_user
+  ...Avatar_user_3tUUbs
+}
+
+fragment UserCard_user_3tUUbs on User {
+  id
+  entityId
+  name
+  title
+  isAdmin
+  email
+  ...Pronouns_user
+  ...Avatar_user_3tUUbs
+}
+
+fragment UserHoverCard_user on User {
+  entityId
+  name
+  ...UserCard_user
+}
+
+fragment ValuesModal_company on Company {
+  values {
+    id
+    name
+    description
+  }
+}
