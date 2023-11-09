@@ -36,6 +36,10 @@ Before running the script, you need to set up your environment variables by crea
 
 Copy the `.env.example` to a new file named `.env`.
 
+```bash
+cp .env.example .env
+```
+
 Fill in the `ACCESS_TOKEN` and `LATTICE_USER_ENTITY_ID` with your own values obtained from Lattice.
 
 ### Obtaining ACCESS_TOKEN
@@ -70,6 +74,23 @@ For example, to disable backup:
 ```bash
 poetry run main.py --no-backup
 ```
+
+## Data Backup Details
+
+The Lattice Competency Backup Tool captures and saves the following types of data:
+
+### User Competencies
+
+- **Competency Data**: Each competency includes the name, description and 'designation' aka 'Opportunity' or 'Strength'.
+- **Current Job Level**: The current level of the user within their career track, including the name and description.
+- **Next Job Level**: The next level within the user's career track, including the name and description.
+- **Comments**: Comments are captured for each competency, including the commenter's name, the date of the comment, and the comment text itself.
+
+### Growth Areas
+
+- **Growth Area Data** (currently not printed, only saved)
+
+All the above data is saved in JSON format in the `./backup` directory. The growth area data is currently only saved and not printed to the console.
 
 ## Important Notes
 
