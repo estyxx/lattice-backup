@@ -59,20 +59,20 @@ Fill in the `ACCESS_TOKEN` and `LATTICE_USER_ENTITY_ID` with your own values obt
 Once you have your `ACCESS_TOKEN` and `LATTICE_USER_ENTITY_ID`, you can run the script:
 
 ```bash
-poetry run main.py
+poetry run backup
 ```
 
 ## Backup Options
 
-By default, the script will save the backup data in the `./backup` directory. You can control the backup behavior with the following command line options:
+By default, the script will save the responses `.json` data in the `./backup` directory. You can control the save behavior with the following command line options:
 
-- `--backup`: Enables backup (this is the default behavior).
-- `--no-backup`: Disables backup.
+- `--save`: Enables save (this is the default behavior).
+- `--no-save`: Disables save.
 
-For example, to disable backup:
+For example, to disable save:
 
 ```bash
-poetry run main.py --no-backup
+poetry run backup --no-save
 ```
 
 ## Data Backup Details

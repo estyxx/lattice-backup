@@ -11,7 +11,7 @@ def _execute(
     query_name: str,
     id: str,
     variables: dict[str, str],
-    backup: bool = True,
+    save: bool = True,
     backup_name_suffix: str = "",
 ):
     query = Path(f"./lattice_backup/queries/{query_name}.graphql").read_text()
@@ -32,10 +32,33 @@ def _execute(
             response.raise_for_status()
             data = response.json()
         except httpx.HTTPStatusError as e:
-            print(f"Error while executing '{query_name}':", e.response.json())
-            return
+            if e.response.status_code == httpx.codes.UNAUTHORIZED:
+                print(
+                    "Unauthorized access. You might need to refresh the Access Token. "
+                    "Please check the README for guidance."
+                )
+            elif e.response.status_code == httpx.codes.NOT_FOUND:
+                print(
+                    "The requested resource was not found. Please check the URL and try again."
+                )
+            else:
+                print(
+                    f"HTTP error occurred: {e.response.status_code} - {e.response.reason_phrase}"
+                )
 
-        if backup:
+            try:
+                error_details = e.response.json()
+                print(f"Error details: {error_details}")
+            except json.JSONDecodeError:
+                print("Unable to decode the error response as JSON.")
+            except Exception as error_parsing_exception:
+                print(
+                    f"Unexpected error while parsing error response: {error_parsing_exception}"
+                )
+
+            raise e
+
+        if save:
             # Generate a filename with a timestamp
             timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
             output_filename = f"{timestamp}_{query_name}{backup_name_suffix}.json"
@@ -54,33 +77,33 @@ def _execute(
         return data
 
 
-def get_competencies(backup: bool = True):
+def get_competencies(save: bool = True):
     response = _execute(
         query_name="competency-view",
         id="CompetencyViewQuery",
         variables={
             "userEntityId": config["LATTICE_USER_ENTITY_ID"],
         },
-        backup=backup,
+        save=save,
     )
     return response
 
 
-def get_growth_areas(backup: bool = True):
+def get_growth_areas(save: bool = True):
     response = _execute(
         query_name="growth-area",
         id="GrowthAreasQuery",
         variables={
             "userEntityId": config["LATTICE_USER_ENTITY_ID"],
         },
-        backup=backup,
+        save=save,
     )
     return response
 
 
 def get_growth_area_progress(
     growth_area_entity_id: str,
-    backup: bool = True,
+    save: bool = True,
 ):
     response = _execute(
         query_name="growth-area-progress",
@@ -89,7 +112,7 @@ def get_growth_area_progress(
             "userEntityId": config["LATTICE_USER_ENTITY_ID"],
             "growthAreaEntityId": growth_area_entity_id,
         },
-        backup=backup,
+        save=save,
         backup_name_suffix=f"_{growth_area_entity_id}",
     )
     return response

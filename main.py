@@ -3,8 +3,8 @@ from lattice_backup import types
 import argparse
 
 
-def _growth_area_backup(backup: bool = True):
-    data = lattice.get_growth_areas(backup=backup)
+def _growth_area_backup(save: bool = True):
+    data = lattice.get_growth_areas(save=save)
     growth_areas = data["data"]["viewer"]["growthPlanUser"]["growthPlan"][
         "growthAreas"
     ]["edges"]
@@ -13,12 +13,12 @@ def _growth_area_backup(backup: bool = True):
 
         # get the progress detail for every area
         lattice.get_growth_area_progress(
-            growth_area_entity_id=growth_area_entity_id, backup=bool
+            growth_area_entity_id=growth_area_entity_id, save=save
         )
 
 
-def _competencies_backup(backup: bool = True):
-    data = lattice.get_competencies(backup=backup)
+def _competencies_backup(save: bool = True):
+    data = lattice.get_competencies(save=save)
     user = types.User.from_dict(data["data"]["user"])
 
     if not user.track:
@@ -58,23 +58,23 @@ def _competencies_backup(backup: bool = True):
         print("-" * 30)
 
 
-def main(backup: bool):
-    _competencies_backup(backup=backup)
-    _growth_area_backup(backup=backup)
+def main():
+    parser = argparse.ArgumentParser(description="Lattice save")
+    parser.add_argument(
+        "--save",
+        dest="save",
+        action="store_true",
+        help="Enable save (default: True)",
+    )
+    parser.add_argument(
+        "--no-save", dest="save", action="store_false", help="Disable save"
+    )
+    parser.set_defaults(save=True)
+    args = parser.parse_args()
+
+    _competencies_backup(save=args.save)
+    _growth_area_backup(save=args.save)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Lattice backup")
-    parser.add_argument(
-        "--backup",
-        dest="backup",
-        action="store_true",
-        help="Enable backup (default: True)",
-    )
-    parser.add_argument(
-        "--no-backup", dest="backup", action="store_false", help="Disable backup"
-    )
-    parser.set_defaults(backup=True)
-    args = parser.parse_args()
-
-    raise SystemExit(main(backup=args.backup))
+    raise SystemExit(main())

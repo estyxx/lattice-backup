@@ -17,6 +17,10 @@ google-auth-oauthlib = "^1.1.0"
 [tool.poetry.group.dev.dependencies]
 detect-secrets = "^1.4.0"
 
+[tool.poetry.scripts]
+backup = "main:main"
+
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
